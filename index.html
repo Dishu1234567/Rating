@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Reviews with Star Rating</title>
+    <style>
+        /* CSS styles for stars */
+        .star {
+            font-size: 24px;
+            color: #ddd; /* Default star color */
+            cursor: pointer;
+        }
+
+        .star.rated {
+            color: #ffcc00; /* Rated star color (yellow) */
+        }
+
+        /* Additional CSS styles for the layout */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .review-form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .rating {
+            margin-bottom: 10px;
+        }
+
+        #review-text {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+        }
+
+        #submit-review {
+            margin-top: 10px;
+        }
+
+        .reviews {
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+        .review {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .review p {
+            margin-bottom: 10px;
+        }
+
+        .review .stars {
+            font-size: 24px;
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Reviews with Star Rating</h1>
+        <div class="review-form">
+            <h3>Write a Review</h3>
+            <div class="rating">
+                <!-- Star icons will be added here dynamically -->
+            </div>
+            <textarea id="review-text" placeholder="Write your review here..."></textarea>
+            <button id="submit-review" class="btn btn-primary">Submit Review</button>
+        </div>
+        <div class="reviews">
+            <h3>Latest Reviews</h3>
+            <div id="review-list">
+                <!-- Reviews will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        // jQuery code goes here
+        $(document).ready(function() {
+            // Dynamically create star rating icons
+            var maxStars = 5;
+            var starsHtml = '';
+            for (var i = 1; i <= maxStars; i++) {
+                starsHtml += '<span class="star" data-star="' + i + '">&#9733;</span>';
+            }
+            $('.rating').html(starsHtml);
+
+            // Handle star rating clicks
+            $('.star').click(function() {
+                var selectedStars = $(this).data('star');
+                $(this).addClass('rated');
+                $(this).prevAll().addClass('rated');
+                $(this).nextAll().removeClass('rated');
+                $('#rating-input').val(selectedStars); // You can store the selected rating in a hidden input field if needed
+            });
+
+            // Handle submit button click
+            $('#submit-review').click(function() {
+                var rating = $('.rated').length;
+                var reviewText = $('#review-text').val();
+
+                if (rating === 0 || reviewText === "") {
+                    alert('Please provide a rating and review text.');
+                    return;
+                }
+
+                var starsHtml = '<div class="stars">' + '&#9733;'.repeat(rating) + '</div>';
+                var reviewHtml = '<div class="review"><p>' + starsHtml + '</p><p>' + reviewText + '</p></div>';
+
+                $('#review-list').prepend(reviewHtml);
+                $('.star').removeClass('rated');
+                $('#review-text').val('');
+            });
+        });
+    </script>
+</body>
+</html>
